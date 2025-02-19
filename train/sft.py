@@ -11,7 +11,7 @@ import trl
 
 @dataclass
 class TrainingConfig:
-    model_name: str = field(default="Qwen/Qwen2.5-32B-Instruct")
+    model_name: str = field(default="Qwen/Qwen2.5-0.5B-Instruct")
     block_size: int = field(default=32768)
     wandb_project: Optional[str] = field(default="s1")
     wandb_entity: Optional[str] = field(default="hashimoto-group")

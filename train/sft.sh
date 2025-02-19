@@ -1,20 +1,20 @@
 # Reference Running: bash train/sft.sh
 # {'train_runtime': 5268.8407, 'train_samples_per_second': 0.949, 'train_steps_per_second': 0.119, 'train_loss': 0.1172730620391667, 'epoch': 5.0}
 uid="$(date +%Y%m%d_%H%M%S)"
-base_model="Qwen/Qwen2.5-32B-Instruct"
+base_model="Qwen/Qwen2.5-0.5B-Instruct"
 lr=1e-5
 min_lr=0
-epochs=5
+epochs=1
 weight_decay=1e-4 # -> the same training pipe as slurm_training
 micro_batch_size=1 # -> batch_size will be 16 if 16 gpus
-gradient_accumulation_steps=1 # requires more GPU memory
+gradient_accumulation_steps=16 # requires more GPU memory
 max_steps=-1
 gpu_count=$(nvidia-smi -L | wc -l)
 push_to_hub=false
 
 torchrun --nproc-per-node ${gpu_count} --master_port 12345 \
     train/sft.py \
-    --block_size=32768 \
+    --block_size=4096 \
     --per_device_train_batch_size=${micro_batch_size} \
     --per_device_eval_batch_size=${micro_batch_size} \
     --gradient_accumulation_steps=${gradient_accumulation_steps} \
